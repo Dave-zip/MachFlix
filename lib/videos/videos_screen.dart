@@ -69,45 +69,6 @@ class _VideosScreenState extends State<VideosScreen> {
               leading: Image.asset(video.image),
               title: Text(video.name),
               subtitle: Text('Gênero: ${video.genre} - Tipo: ${video.type}'),
-              trailing: PopupMenuButton<String>(
-                onSelected: (value) {
-                  if (value == 'Editar') {
-                    // Ação para editar o vídeo
-                    // Crie um novo objeto Video com os dados que você quiser
-                    Video editedVideo = Video(
-                      id: video.id,
-                      name: video.name + ' editado', // Mudei o nome do vídeo
-                      description: video.description +
-                          ' editado', // Mudei a descrição do vídeo
-                      genre:
-                          video.genre + ' editado', // Mudei o gênero do vídeo
-                      type: video.type + ' editado', // Mudei o tipo do vídeo
-                      ageRestriction: video.ageRestriction +
-                          '+', // Mudei a restrição de idade do vídeo
-                      durationMinutes: video.durationMinutes +
-                          10, // Mudei a duração do vídeo
-                      image: video.image, // Mantive a mesma imagem do vídeo
-                      releaseDate: video
-                          .releaseDate, // Mantive a mesma data de lançamento do vídeo
-                    );
-                    editVideo(index,
-                        editedVideo); // Chamei o método de editar o vídeo
-                  } else if (value == 'Excluir') {
-                    // Ação para excluir o vídeo
-                    deleteVideo(index); // Chamei o método de excluir o vídeo
-                  }
-                },
-                itemBuilder: (context) => [
-                  PopupMenuItem<String>(
-                    value: 'Editar',
-                    child: Text('Editar'),
-                  ),
-                  PopupMenuItem<String>(
-                    value: 'Excluir',
-                    child: Text('Excluir'),
-                  ),
-                ],
-              ),
               onTap: () {
                 // Ação ao clicar no título do vídeo (exibir detalhes, etc.)
                 // Usei um widget AlertDialog para exibir as informações do vídeo
@@ -144,25 +105,6 @@ class _VideosScreenState extends State<VideosScreen> {
               },
             ),
           );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        // Adicionei um botão flutuante para adicionar um novo vídeo
-        child: Icon(Icons.add),
-        onPressed: () {
-          // Crie um novo objeto Video com os dados que você quiser
-          Video newVideo = Video(
-            id: 3,
-            name: 'Video 3',
-            description: 'Descrição do Video 3',
-            genre: 'Comedy',
-            type: 'Filme',
-            ageRestriction: '12 anos',
-            durationMinutes: 90,
-            image: 'assets/images/alvo.png',
-            releaseDate: '01/03/2020',
-          );
-          addVideo(newVideo); // Chamei o método de adicionar o vídeo
         },
       ),
     );

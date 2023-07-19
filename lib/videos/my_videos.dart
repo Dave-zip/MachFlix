@@ -159,7 +159,7 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
             type: 'Filme',
             ageRestriction: '12 anos',
             durationMinutes: 90,
-            image: 'assets/images/alvo.jpg',
+            image: 'assets/images/alvo.png',
             releaseDate: '01/03/2020',
           );
           addVideo(newVideo); // Chamei o método de adicionar o vídeo
