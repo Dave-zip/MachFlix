@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final/home/home_screen.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-void main() {
+void main() async {
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
+
   runApp(MyApp());
 }
 
