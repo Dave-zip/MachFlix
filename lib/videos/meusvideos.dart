@@ -27,6 +27,10 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Meus Vídeos'),
+        automaticallyImplyLeading: false, // Removendo o botão de voltar
+      ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _videosFuture,
         builder: (context, snapshot) {
@@ -54,7 +58,6 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                       Text(
                           'Imagem da Thumbnail: ${videoData['thumbnailImageId']}'),
                       Text('Data de Lançamento: ${videoData['releaseDate']}'),
-                      Text('U: ${videoData['user_id']}'),
                     ],
                   ),
                   trailing: Row(
@@ -221,7 +224,8 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
   bool _validateVideoData(Map<String, dynamic> video) {
     if (video['name'].isEmpty ||
         video['description'].isEmpty ||
-        video['ageRestriction'].isEmpty ||
+        (video['ageRestriction'] != 'S' &&
+            video['ageRestriction'] != 'N') || // Nova validação
         video['durationMinutes'] <= 0 ||
         video['thumbnailImageId'].isEmpty ||
         video['releaseDate'].isEmpty) {

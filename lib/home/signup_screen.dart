@@ -142,23 +142,24 @@ class SignupScreen extends StatelessWidget {
                   String email = _emailController.text;
                   String password = _passwordController.text;
 
-                  DatabaseHelper.instance.insertData({"name": name, "email": email, "password": password});
-                  
-                  // print('Nome: $name');
-                  // print('Email: $email');
-                  // print('Senha: $password');
+                  DatabaseHelper.instance.insertData(
+                      {"name": name, "email": email, "password": password});
 
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   SnackBar(
-                  //     content: Text(
-                  //         'Cadastro realizado com sucesso! Nome: $name, Email: $email'),
-                  //     action: SnackBarAction(
-                  //         label: 'Desfazer',
-                  //         onPressed: () {
-                  //           print('Cadastro desfeito');
-                  //         }),
-                  //   ),
-                  // );
+                  print('Nome: $name');
+                  print('Email: $email');
+                  print('Senha: $password');
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          'Cadastro realizado com sucesso! Nome: $name, Email: $email'),
+                      action: SnackBarAction(
+                          label: 'Desfazer',
+                          onPressed: () {
+                            print('Cadastro desfeito');
+                          }),
+                    ),
+                  );
                 }
               },
               child: const Text('Cadastrar'),

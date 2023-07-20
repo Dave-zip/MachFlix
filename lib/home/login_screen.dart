@@ -39,7 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (userId != -1) {
       // If the credentials are correct, update _loggedInUserId and navigate to MyVideosScreen
-
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -88,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 16.0),
               TextFormField(
+                controller: _emailController, // Connect to the email controller
                 decoration: const InputDecoration(
                   labelText: 'Email',
                 ),
@@ -100,7 +100,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 16.0),
               TextFormField(
-                controller: _passwordController,
+                controller:
+                    _passwordController, // Connect to the password controller
                 obscureText: !_showPassword,
                 decoration: InputDecoration(
                   labelText: 'Senha',
@@ -149,18 +150,9 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  _entrar();
-                  
-                  // Ação para o botão "Entrar"
-                  // Você pode acessar os valores dos campos usando _passwordController.text e o valor do campo de usuário
-                  // if (_formKey.currentState!.validate()) {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => MyVideosScreen(),
-                  //     ),
-                  //   );
-                  // }
+                  if (_formKey.currentState!.validate()) {
+                    _entrar();
+                  }
                 },
                 child: const Text('Entrar'),
               ),

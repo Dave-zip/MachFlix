@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('MachFlix'),
+        automaticallyImplyLeading: false, // Remover o botão de voltar
       ),
       body: Stack(
         children: [

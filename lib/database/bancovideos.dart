@@ -33,7 +33,7 @@ class DatabaseHelperV {
       type INTEGER NOT NULL,
       ageRestriction VARCHAR NOT NULL,
       durationMinutes INTEGER NOT NULL,
-      thumbnailImageId VARCHAR NOT NULL,
+      thumbnailImageUrl VARCHAR,
       releaseDate TEXT NOT NULL
     )
   ''');
