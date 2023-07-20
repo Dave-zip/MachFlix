@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -24,9 +26,16 @@ class DatabaseHelper {
   }
 
   Future<void> _createDatabase(Database db, int version) async {
-    await db.execute('''
-      MachFlix/script.txt
-    ''');
+    String path = 'lib/database/script.txt';
+    String sql = await File(path).readAsString();
+    List<String> queries = sql.split(';');
+    for (String query in queries) {
+      print(query);
+      await db.execute(query);
+    }
+    // await db.execute('''
+    //   MachFlix/script.txt
+    // ''');
   }
 
   Future<int> insertData(Map<String, dynamic> row) async {
