@@ -26,8 +26,9 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
     return videos;
   }
 
-  void addVideo(Map<String, dynamic> video) {
+  void addVideo(Map<String, dynamic> video, String genre) {
     setState(() {
+      DatabaseHelperV.instance.insertGenre({'name': genre});
       DatabaseHelperV.instance.insertVideo(video);
     });
   }

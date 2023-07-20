@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../database/bancovideos.dart';
 import '../home/login_screen.dart';
-import './my_videos.dart'; // Importe a tela MyVideosScreen.dart
+import 'videos.dart'; // Importe a tela MyVideosScreen.dart
 import 'package:intl/intl.dart';
 
 class MeusVideosScreen extends StatefulWidget {
@@ -11,11 +11,19 @@ class MeusVideosScreen extends StatefulWidget {
 
 class _MeusVideosScreenState extends State<MeusVideosScreen> {
   late Future<List<Map<String, dynamic>>> _videosFuture;
-
+  int? genreId;
+  String genre = '';
   @override
   void initState() {
     super.initState();
     _videosFuture = _fetchVideos();
+  }
+
+  void addVideo(Map<String, dynamic> video, String genre) {
+    setState(() {
+      DatabaseHelperV.instance.insertGenre({'name': genre});
+      DatabaseHelperV.instance.insertVideo(video);
+    });
   }
 
   Future<List<Map<String, dynamic>>> _fetchVideos() async {
@@ -127,25 +135,34 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
   }
 
   void _showCreateVideoForm(BuildContext context) {
+    String name = '';
+    String description = '';
+    int type = 0; // Default to 0
+    String ageRestriction = '';
+    int durationMinutes = 0;
+    String thumbnailImageId = '';
+    String releaseDate = '';
+    String genreOption = '';
+
+    // Obter a data de hoje
+    DateTime currentDate = DateTime.now();
+    // Formatar a data para o formato desejado (dia/mês/ano)
+    String formattedDate = DateFormat('dd-MM-yyyy').format(currentDate);
+
+    // Definir a data de hoje como a data de lançamento padrão
+    releaseDate = formattedDate;
+
+    List<String> genreOptions = [
+      'Ação',
+      'Aventura',
+      'Comédia',
+      'Romance',
+      'Drama'
+    ];
+
     showDialog(
       context: context,
       builder: (context) {
-        String name = '';
-        String description = '';
-        int type = 0; // Default to 0
-        String ageRestriction = '';
-        int durationMinutes = 0;
-        String thumbnailImageId = '';
-        String releaseDate = '';
-
-        // Obter a data de hoje
-        DateTime currentDate = DateTime.now();
-        // Formatar a data para o formato desejado (dia/mês/ano)
-        String formattedDate = DateFormat('dd-MM-yyyy').format(currentDate);
-
-        // Definir a data de hoje como a data de lançamento padrão
-        releaseDate = formattedDate;
-
         return AlertDialog(
           title: Text('Novo Vídeo'),
           content: Column(
@@ -179,14 +196,18 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                 readOnly: true, // Tornar o TextFormField não editável
                 decoration: InputDecoration(labelText: 'Data de Lançamento'),
               ),
-              TextFormField(
-                onChanged: (value) {
-                  // Validar se o tipo é 0 ou 1
-                  if (value == '0' || value == '1') {
-                    type = int.parse(value);
-                  }
-                },
-                decoration: InputDecoration(labelText: 'Tipo (0 ou 1)'),
+              // Dropdown button to select genre
+              DropdownButtonFormField<String>(
+                value: genreOption,
+                onChanged: (value) => genreOption = value!,
+                items: genreOptions
+                    .map((genre) => DropdownMenuItem<String>(
+                          value: genre,
+                          child: Text(genre),
+                        ))
+                    .toList(),
+                hint: Text('Selecione o gênero'),
+                decoration: InputDecoration(labelText: 'Gênero'),
               ),
             ],
           ),
@@ -198,7 +219,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
               child: Text('Cancelar'),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // Salvar as informações do vídeo no banco de dados
                 Map<String, dynamic> video = {
                   'user_id': userId,
@@ -211,34 +232,14 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                   'releaseDate': releaseDate,
                 };
 
-                // Validar os dados do vídeo antes de inserir no banco de dados
-                if (_validateVideoData(video)) {
-                  DatabaseHelperV.instance.insertVideo(video);
-                  // Fechar o diálogo
-                  Navigator.of(context).pop();
-                  // Atualizar a lista de vídeos
-                  setState(() {
-                    _videosFuture = _fetchVideos();
-                  });
-                } else {
-                  // Mostrar uma mensagem de erro se os dados forem inválidos
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Erro'),
-                      content:
-                          Text('Por favor, preencha os campos corretamente.'),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
-                }
+                await addVideo(video, genre);
+
+                // Fechar o diálogo
+                Navigator.of(context).pop();
+                // Atualizar a lista de vídeos
+                setState(() {
+                  _videosFuture = _fetchVideos();
+                });
               },
               child: Text('Salvar'),
             ),
@@ -251,11 +252,12 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
   bool _validateVideoData(Map<String, dynamic> video) {
     if (video['name'].isEmpty ||
         video['description'].isEmpty ||
-        (video['ageRestriction'] != 'S' &&
-            video['ageRestriction'] != 'N') || // Nova validação
+        (video['ageRestriction'] != 'S' && video['ageRestriction'] != 'N') ||
         video['durationMinutes'] <= 0 ||
         video['thumbnailImageId'].isEmpty ||
-        video['releaseDate'].isEmpty) {
+        video['releaseDate'].isEmpty ||
+        genre == null) {
+      // Check if genre is selected
       return false;
     }
 

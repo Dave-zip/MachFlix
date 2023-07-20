@@ -18,29 +18,53 @@ class DatabaseHelperV {
     String path = join(await getDatabasesPath(), 'my_video.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 3,
       onCreate: _createDatabase,
     );
   }
 
   Future<void> _createDatabase(Database db, int version) async {
     await db.execute('''
-    CREATE TABLE video(
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER NOT NULL,
-      name VARCHAR(2) NOT NULL,
-      description TEXT NOT NULL,
-      type INTEGER NOT NULL,
-      ageRestriction VARCHAR NOT NULL,
-      durationMinutes INTEGER NOT NULL,
-      thumbnailImageUrl VARCHAR,
-      releaseDate TEXT NOT NULL
-    )
-  ''');
+      CREATE TABLE video(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        name VARCHAR(2) NOT NULL,
+        description TEXT NOT NULL,
+        type INTEGER NOT NULL,
+        ageRestriction VARCHAR NOT NULL,
+        durationMinutes INTEGER NOT NULL,
+        thumbnailImageId VARCHAR,
+        releaseDate TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE genre(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name VARCHAR NOT NULL
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE video_genre(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        videoid INTEGER NOT NULL,
+        genreid INTEGER NOT NULL,
+        FOREIGN KEY(videoid) REFERENCES video(id),
+        FOREIGN KEY(genreid) REFERENCES genre(id)
+      )
+    ''');
+
+    // Insert genre data
+    await db.rawInsert(
+        'INSERT INTO genre (name) VALUES ("Ação"), ("Aventura"), ("Comédia"), ("Romance"), ("Drama")');
   }
+
+  // Video Table
 
   Future<int> insertVideo(Map<String, dynamic> video) async {
     Database db = await instance.database;
+
     return await db.insert('video', video);
   }
 
@@ -69,5 +93,45 @@ class DatabaseHelperV {
   Future<List<Map<String, dynamic>>> getMyVideos(int userId) async {
     Database db = await instance.database;
     return await db.query('video', where: 'user_id = ?', whereArgs: [userId]);
+  }
+
+  // Genre Table
+
+  Future<int> insertGenre(Map<String, dynamic> genre) async {
+    Database db = await instance.database;
+    return await db.insert('genre', genre);
+  }
+
+  Future<List<Map<String, dynamic>>> getAllGenres() async {
+    Database db = await instance.database;
+    return await db.query('genre');
+  }
+
+  Future<int> updateGenre(Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    int id = row['id'];
+    return await db.update('genre', row, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteGenre(int id) async {
+    Database db = await instance.database;
+    return await db.delete('genre', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // Video_Genre Table
+
+  Future<int> insertVideoGenre(int videoId, int genreId) async {
+    Database db = await instance.database;
+    Map<String, dynamic> videoGenre = {
+      'videoid': videoId,
+      'genreid': genreId,
+    };
+    return await db.insert('video_genre', videoGenre);
+  }
+
+  Future<List<Map<String, dynamic>>> getGenresForVideo(int videoId) async {
+    Database db = await instance.database;
+    return await db
+        .query('video_genre', where: 'videoid = ?', whereArgs: [videoId]);
   }
 }
