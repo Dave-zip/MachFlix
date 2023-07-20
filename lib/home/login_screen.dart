@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final/videos/my_videos.dart';
+import '../database/banco.dart';
 import '../database/banco.dart'; // Importe o arquivo do banco de dados
 
 int userId = -1;
@@ -88,11 +89,11 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 16.0),
               TextFormField(
                 decoration: const InputDecoration(
-                  labelText: 'Usuário',
+                  labelText: 'Email',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, digite o seu usuário';
+                    return 'Por favor, digite o seu email de usuário';
                   }
                   return null;
                 },
@@ -148,16 +149,18 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
+                  _entrar();
+                  
                   // Ação para o botão "Entrar"
                   // Você pode acessar os valores dos campos usando _passwordController.text e o valor do campo de usuário
-                  if (_formKey.currentState!.validate()) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MyVideosScreen(),
-                      ),
-                    );
-                  }
+                  // if (_formKey.currentState!.validate()) {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => MyVideosScreen(),
+                  //     ),
+                  //   );
+                  // }
                 },
                 child: const Text('Entrar'),
               ),
