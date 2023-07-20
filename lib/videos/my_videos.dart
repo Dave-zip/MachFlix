@@ -199,9 +199,6 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
       appBar: AppBar(
         title: const Text('Meus Vídeos'),
       ),
-
-
-
       body: FutureBuilder<List<Map<String, dynamic>>>(
       future: videos,
       builder: (context, snapshot) {
@@ -285,96 +282,7 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
           );
         }
       },
-    ),
-
-
-
-
-
-
-    //   body: ListView.builder(
-    //     itemCount: videos.length,
-    //     itemBuilder: (context, index) {
-    //       final video = videos[index];
-    //       return Card(
-    //         child: ListTile(
-    //           // leading: Image.asset(video.image),
-    //           title: Text(video["name"]),
-    //           subtitle: Text('Gênero: ${video["genre"]} - Tipo: ${video["type"]}'),
-    //           trailing: PopupMenuButton<String>(
-    //             onSelected: (value) {
-    //               if (value == 'Editar') {
-    //                 // Ação para editar o vídeo
-    //                 showEditDialog(context, index, video); // Chamei o método de exibir o diálogo de edição de vídeo
-    //               } else if (value == 'Excluir') {
-    //                 // Ação para excluir o vídeo
-    //                 deleteVideo(index); // Chamei o método de excluir o vídeo
-    //               }
-    //             },
-    //             itemBuilder: (context) => [
-    //               const PopupMenuItem<String>(
-    //                 value: 'Editar',
-    //                 child: Text('Editar'),
-    //               ),
-    //               const PopupMenuItem<String>(
-    //                 value: 'Excluir',
-    //                 child: Text('Excluir'),
-    //               ),
-    //             ],
-    //           ),
-    //           onTap: () {
-    //             // Ação ao clicar no título do vídeo (exibir detalhes, etc.)
-    //             // Usei um widget AlertDialog para exibir as informações do vídeo
-    //             showDialog(
-    //               context: context,
-    //               builder: (context) => AlertDialog(
-    //                 title: Text(video.name),
-    //                 content: Column(
-    //                   mainAxisSize: MainAxisSize
-    //                       .min, // Usei essa propriedade para ajustar o tamanho da coluna ao conteúdo
-    //                   crossAxisAlignment: CrossAxisAlignment
-    //                       .start, // Usei essa propriedade para alinhar o conteúdo à esquerda
-    //                   children: [
-    //                     Text('Descrição: ${video.description}'),
-    //                     Text('Tipo: ${video.type}'),
-    //                     Text(
-    //                         'Classificação indicativa:${video.ageRestriction}'),
-    //                     Text('Duração em minutos: ${video.durationMinutes}'),
-    //                     Text('Data de lançamento: ${video.releaseDate}'),
-    //                   ],
-    //                 ),
-    //                 actions: [
-    //                   TextButton(
-    //                     onPressed: () {
-    //                       // Ação para fechar o diálogo
-    //                       Navigator.pop(context);
-    //                     },
-    //                     child: const Text(
-    //                         'Fechar'), // Usei um texto em vez de um ícone para o botão de fechar
-    //                   ),
-    //                 ],
-    //               ),
-    //             );
-    //           },
-    //           // child: Text('Deslogar'),
-    //         ),
-    //       );
-    //     },
-    //   ),
-    // );
-
-
-
-
-
-
-
-
-
-
-
-
-
+      ),
     );
   }
 }
