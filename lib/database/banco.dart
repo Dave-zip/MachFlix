@@ -27,8 +27,8 @@ class DatabaseHelper {
 
   Future<void> _createDatabase(Database db, int version) async {
     String path = 'lib/database/script.txt';
-    String sql = await File(path).readAsString();
-    List<String> queries = sql.split(';');
+    List<String> queries = File(path).readAsLinesSync();
+    
     for (String query in queries) {
       print(query);
       await db.execute(query);
