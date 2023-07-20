@@ -25,12 +25,7 @@ class DatabaseHelper {
 
   Future<void> _createDatabase(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE user(
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name VARCHAR NOT NULL,
-      email VARCHAR NOT NULL,
-      password VARCHAR NOT NULL
-)
+      MachFlix/script.txt
     ''');
   }
 
@@ -39,9 +34,14 @@ class DatabaseHelper {
     return await db.insert('user', row);
   }
 
-  Future<List<Map<String, dynamic>>> getAllData() async {
+  Future<List<Map<String, dynamic>>> getUserData() async {
     Database db = await instance.database;
     return await db.query('user');
+  }
+
+  Future<List<Map<String, dynamic>>> getVideoData() async {
+    Database db = await instance.database;
+    return await db.query('video');
   }
 
   Future<int> updateData(Map<String, dynamic> row) async {

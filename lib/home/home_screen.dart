@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_final/home/login_screen.dart';
 import 'package:projeto_final/home/signup_screen.dart';
 import 'package:projeto_final/home/info_screen.dart';
-import 'package:projeto_final/videos/my_videos.dart';
-import 'package:projeto_final/videos/videos_screen.dart';
+import 'package:projeto_final/videos/videos.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

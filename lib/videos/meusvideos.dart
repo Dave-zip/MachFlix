@@ -21,7 +21,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
 
   void addVideo(Map<String, dynamic> video, String genre) {
     setState(() {
-      DatabaseHelperV.instance.insertGenre({'name': genre});
+      // DatabaseHelperV.instance.insertGenre({'name': genre});
       DatabaseHelperV.instance.insertVideo(video);
     });
   }
@@ -232,7 +232,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                   'releaseDate': releaseDate,
                 };
 
-                await addVideo(video, genre);
+                addVideo(video, genre);
 
                 // Fechar o diálogo
                 Navigator.of(context).pop();

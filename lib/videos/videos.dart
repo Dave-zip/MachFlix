@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../database/banco.dart';
 import '../database/bancovideos.dart';
 import '../home/home_screen.dart';
 import '../home/login_screen.dart';
@@ -21,7 +22,8 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
 
   Future<List<Map<String, dynamic>>> _fetchVideos() async {
     List<Map<String, dynamic>> videos =
-        (await DatabaseHelperV.instance.getAllVideo());
+        // (await DatabaseHelperV.instance.getAllVideo());
+        (await DatabaseHelper.instance.getVideoData());
 
     return videos;
   }

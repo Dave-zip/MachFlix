@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final/videos/my_videos.dart';
+import 'package:projeto_final/videos/videos.dart';
 import '../database/banco.dart';
 import '../database/banco.dart'; // Importe o arquivo do banco de dados
 
