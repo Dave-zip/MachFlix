@@ -22,8 +22,8 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
 
   Future<List<Map<String, dynamic>>> _fetchVideos() async {
     List<Map<String, dynamic>> videos =
-        // (await DatabaseHelperV.instance.getAllVideo());
-        (await DatabaseHelper.instance.getVideoData());
+        (await DatabaseHelperV.instance.getAllVideo());
+        // (await DatabaseHelper.instance.getVideoData());
 
     return videos;
   }

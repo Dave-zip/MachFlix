@@ -26,16 +26,21 @@ class DatabaseHelper {
   }
 
   Future<void> _createDatabase(Database db, int version) async {
-    String path = 'lib/database/script.txt';
-    List<String> queries = File(path).readAsLinesSync();
+    // String path = 'lib/database/script.txt';
+    // List<String> queries = File(path).readAsLinesSync();
     
-    for (String query in queries) {
-      print(query);
-      await db.execute(query);
-    }
-    // await db.execute('''
-    //   MachFlix/script.txt
-    // ''');
+    // for (String query in queries) {
+    //   print(query);
+    //   await db.execute(query);
+    // }
+    await db.execute('''
+      CREATE TABLE user(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name VARCHAR NOT NULL,
+      email VARCHAR NOT NULL,
+      password VARCHAR NOT NULL
+    )
+    ''');
   }
 
   Future<int> insertData(Map<String, dynamic> row) async {
