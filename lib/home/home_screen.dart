@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ColorFiltered(
             colorFilter: ColorFilter.mode(Colors.grey, BlendMode.darken),
             // Adicionando um argumento child com um widget Image
-            child: Image.asset('assets/background.jpg', fit: BoxFit.cover),
+            child: Image.asset('assets/images/boom.jpg', fit: BoxFit.cover),
           ),
           // Adicionando o widget PageView para os widgets LoginScreen e SignupScreen
           PageView(
