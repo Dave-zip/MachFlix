@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../database/bancovideos.dart';
 import '../home/login_screen.dart';
 import './my_videos.dart'; // Importe a tela MyVideosScreen.dart
+import 'package:intl/intl.dart';
 
 class MeusVideosScreen extends StatefulWidget {
   @override
@@ -22,6 +23,22 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
         await DatabaseHelperV.instance.getMyVideos(userId);
 
     return videos;
+  }
+
+  Future<String?> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (picked != null) {
+      // Format the selected date as 'dd-MM-yyyy'
+      return '${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year.toString()}';
+    }
+
+    return null;
   }
 
   @override
@@ -121,6 +138,14 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
         String thumbnailImageId = '';
         String releaseDate = '';
 
+        // Obter a data de hoje
+        DateTime currentDate = DateTime.now();
+        // Formatar a data para o formato desejado (dia/mês/ano)
+        String formattedDate = DateFormat('dd-MM-yyyy').format(currentDate);
+
+        // Definir a data de hoje como a data de lançamento padrão
+        releaseDate = formattedDate;
+
         return AlertDialog(
           title: Text('Novo Vídeo'),
           content: Column(
@@ -149,12 +174,14 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                 decoration: InputDecoration(labelText: 'Imagem da Thumbnail'),
               ),
               TextFormField(
+                initialValue: formattedDate, // Mostrar a data de hoje no campo
                 onChanged: (value) => releaseDate = value,
+                readOnly: true, // Tornar o TextFormField não editável
                 decoration: InputDecoration(labelText: 'Data de Lançamento'),
               ),
               TextFormField(
                 onChanged: (value) {
-                  // Validate if the type is 0 or 1
+                  // Validar se o tipo é 0 ou 1
                   if (value == '0' || value == '1') {
                     type = int.parse(value);
                   }
@@ -172,7 +199,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Save the video information to the database
+                // Salvar as informações do vídeo no banco de dados
                 Map<String, dynamic> video = {
                   'user_id': userId,
                   'name': name,
@@ -184,17 +211,17 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                   'releaseDate': releaseDate,
                 };
 
-                // Validate video data before inserting into the database
+                // Validar os dados do vídeo antes de inserir no banco de dados
                 if (_validateVideoData(video)) {
                   DatabaseHelperV.instance.insertVideo(video);
-                  // Close the dialog
+                  // Fechar o diálogo
                   Navigator.of(context).pop();
-                  // Refresh the videos list
+                  // Atualizar a lista de vídeos
                   setState(() {
                     _videosFuture = _fetchVideos();
                   });
                 } else {
-                  // Show an error message if the data is invalid
+                  // Mostrar uma mensagem de erro se os dados forem inválidos
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
