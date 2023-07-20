@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import '../database/bancovideos.dart';
 import '../home/home_screen.dart';
@@ -13,57 +11,57 @@ class MyVideosScreen extends StatefulWidget {
 }
 
 class _MyVideosScreenState extends State<MyVideosScreen> {
-  late Future<List<Map<String, dynamic>>> _videosFuture;
-  late Future<List<Video>> video;
+  // late Future<List<Map<String, dynamic>>> _videosFuture;
+  late Future<List<Map<String, dynamic>>> videos;
 
   @override
   void initState() {
     super.initState();
-    video = _fetchVideos();
+    videos = _fetchVideos();
   }
 
-  Future<List<Video>> _fetchVideos() async {
-    List<Video> videos =
-        (await DatabaseHelperV.instance.getAllVideo()).cast<Video>();
+  Future<List<Map<String, dynamic>>> _fetchVideos() async {
+    List<Map<String, dynamic>> videos =
+        (await DatabaseHelperV.instance.getAllVideo());
 
     return videos;
   }
 
   // Criei um método para adicionar um novo vídeo à lista
-  void addVideo(Video video) {
+  void addVideo(Map<String, dynamic> video) {
     setState(() {
-      videos.add(video);
+      DatabaseHelperV.instance.insertVideo(video);
     });
   }
 
   // Criei um método para editar um vídeo na lista
-  void editVideo(int index, Video video) {
+  void editVideo(int index, Map<String, dynamic> video) {
     setState(() {
-      videos[index] = video;
+      DatabaseHelperV.instance.updateVideo(video);
     });
   }
 
   // Criei um método para excluir um vídeo da lista
   void deleteVideo(int index) {
     setState(() {
-      videos.removeAt(index);
+      DatabaseHelperV.instance.deleteVideo(index);
     });
   }
 
   // Criei um método para exibir o diálogo de edição de vídeo
-  void showEditDialog(BuildContext context, int index, Video video) {
+  void showEditDialog(BuildContext context, int index, Map<String, dynamic> video) {
     // Criei um TextEditingController para cada campo que eu quero editar
-    final nameController = TextEditingController(text: video.name);
+    final nameController = TextEditingController(text: video["name"]);
     final descriptionController =
-        TextEditingController(text: video.description);
-    final genreController = TextEditingController(text: video.genre);
-    final typeController = TextEditingController(text: video.type);
+        TextEditingController(text: video["description"]);
+    final genreController = TextEditingController(text: video["genre"]);
+    final typeController = TextEditingController(text: video["type"]);
     final ageRestrictionController =
-        TextEditingController(text: video.ageRestriction);
+        TextEditingController(text: video["ageRestriction"]);
     final durationMinutesController =
-        TextEditingController(text: video.durationMinutes.toString());
+        TextEditingController(text: video["durationMinutes"].toString());
     final releaseDateController =
-        TextEditingController(text: video.releaseDate);
+        TextEditingController(text: video["releaseDate"]);
 
     // Criei uma variável para armazenar a chave do formulário
     final formKey = GlobalKey<FormState>();
@@ -165,39 +163,30 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
               // Ação para fechar o diálogo sem salvar as alterações
               Navigator.pop(context);
             },
-            child: Text(
-                'Cancelar'), // Usei um texto em vez de um ícone para o botão de cancelar
+            child: const Text('Cancelar'), // Usei um texto em vez de um ícone para o botão de cancelar
           ),
           TextButton(
             onPressed: () {
               // Ação para salvar as alterações se o formulário for válido
               if (formKey.currentState!.validate()) {
                 // Criei um novo objeto Video com os valores dos campos editados
-                Video editedVideo = Video(
-                  id: video.id,
-                  name: nameController
-                      .text, // Usei o nameController para obter o valor do campo nome
-                  description: descriptionController
-                      .text, // Usei o descriptionController para obter o valor do campo descrição
-                  genre: genreController
-                      .text, // Usei o genreController para obter o valor do campo gênero
-                  type: typeController
-                      .text, // Usei o typeController para obter o valor do campo tipo
-                  ageRestriction: ageRestrictionController
-                      .text, // Usei o ageRestrictionController para obter o valor do campo classificação indicativa
-                  durationMinutes: int.parse(durationMinutesController
-                      .text), // Usei o durationMinutesController para obter o valor do campo duração em minutos e converti para int
-                  image: video.image, // Mantive a mesma imagem do vídeo
-                  releaseDate: releaseDateController
-                      .text, // Usei o releaseDateController para obter o valor do campo data de lançamento
-                );
+                Map<String, dynamic> editedVideo = {
+                  "id": video["id"],
+                  "name": nameController.text, // Usei o nameController para obter o valor do campo nome
+                  "description": descriptionController.text, // Usei o descriptionController para obter o valor do campo descrição
+                  "genre": genreController.text, // Usei o genreController para obter o valor do campo gênero
+                  "type": typeController.text, // Usei o typeController para obter o valor do campo tipo
+                  "ageRestriction": ageRestrictionController.text, // Usei o ageRestrictionController para obter o valor do campo classificação indicativa
+                  "durationMinutes": int.parse(durationMinutesController.text), // Usei o durationMinutesController para obter o valor do campo duração em minutos e converti para int
+                  // "image": video.image, // Mantive a mesma imagem do vídeo
+                  "releaseDate": releaseDateController.text, // Usei o releaseDateController para obter o valor do campo data de lançamento
+                };
                 editVideo(
                     index, editedVideo); // Chamei o método de editar o vídeo
                 Navigator.pop(context); // Fechei o diálogo
               }
             },
-            child: Text(
-                'Salvar'), // Usei um texto em vez de um ícone para o botão de salvar
+            child: const Text('Salvar'), // Usei um texto em vez de um ícone para o botão de salvar
           ),
         ],
       ),
@@ -208,97 +197,184 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Meus Vídeos'),
+        title: const Text('Meus Vídeos'),
       ),
-      body: ListView.builder(
-        itemCount: videos.length,
-        itemBuilder: (context, index) {
-          final video = videos[index];
-          return Card(
-            child: ListTile(
-              leading: Image.asset(video.image),
-              title: Text(video.name),
-              subtitle: Text('Gênero: ${video.genre} - Tipo: ${video.type}'),
-              trailing: PopupMenuButton<String>(
-                onSelected: (value) {
-                  if (value == 'Editar') {
-                    // Ação para editar o vídeo
-                    showEditDialog(context, index,
-                        video); // Chamei o método de exibir o diálogo de edição de vídeo
-                  } else if (value == 'Excluir') {
-                    // Ação para excluir o vídeo
-                    deleteVideo(index); // Chamei o método de excluir o vídeo
-                  }
-                },
-                itemBuilder: (context) => [
-                  PopupMenuItem<String>(
-                    value: 'Editar',
-                    child: Text('Editar'),
-                  ),
-                  PopupMenuItem<String>(
-                    value: 'Excluir',
-                    child: Text('Excluir'),
-                  ),
-                ],
-              ),
-              onTap: () {
-                // Ação ao clicar no título do vídeo (exibir detalhes, etc.)
-                // Usei um widget AlertDialog para exibir as informações do vídeo
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text(video.name),
-                    content: Column(
-                      mainAxisSize: MainAxisSize
-                          .min, // Usei essa propriedade para ajustar o tamanho da coluna ao conteúdo
-                      crossAxisAlignment: CrossAxisAlignment
-                          .start, // Usei essa propriedade para alinhar o conteúdo à esquerda
-                      children: [
-                        Text('Descrição: ${video.description}'),
-                        Text('Tipo: ${video.type}'),
-                        Text(
-                            'Classificação indicativa:${video.ageRestriction}'),
-                        Text('Duração em minutos: ${video.durationMinutes}'),
-                        Text('Data de lançamento: ${video.releaseDate}'),
-                      ],
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          // Ação para fechar o diálogo
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                            'Fechar'), // Usei um texto em vez de um ícone para o botão de fechar
+
+
+
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+      future: videos,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        } else {
+          final List<Map<String, dynamic>> videoList = snapshot.data!;
+          return ListView.builder(
+            itemCount: videoList.length,
+            itemBuilder: (context, index) {
+              final video = videoList[index];
+              return Card(
+                child: ListTile(
+                  // leading: Image.asset(video.image),
+                  title: Text(video["name"]),
+                  subtitle: Text('Gênero: ${video["genre"]} - Tipo: ${video["type"]}'),
+                  trailing: PopupMenuButton<String>(
+                    onSelected: (value) {
+                      if (value == 'Editar') {
+                        // Ação para editar o vídeo
+                        showEditDialog(context, index, video); // Chamei o método de exibir o diálogo de edição de vídeo
+                      } else if (value == 'Excluir') {
+                        // Ação para excluir o vídeo
+                        deleteVideo(index); // Chamei o método de excluir o vídeo
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem<String>(
+                        value: 'Editar',
+                        child: Text('Editar'),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'Excluir',
+                        child: Text('Excluir'),
                       ),
                     ],
                   ),
-                );
-              },
-              child: Text('Deslogar'),
-            ),
+                  onTap: () {
+                    // Ação ao clicar no título do vídeo (exibir detalhes, etc.)
+                    // Usei um widget AlertDialog para exibir as informações do vídeo
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(video["name"]),
+                        content: Column(
+                          mainAxisSize: MainAxisSize
+                              .min, // Usei essa propriedade para ajustar o tamanho da coluna ao conteúdo
+                          crossAxisAlignment: CrossAxisAlignment
+                              .start, // Usei essa propriedade para alinhar o conteúdo à esquerda
+                          children: [
+                            Text('Descrição: ${video["description"]}'),
+                            Text('Tipo: ${video["type"]}'),
+                            Text('Classificação indicativa:${video["ageRestriction"]}'),
+                            Text('Duração em minutos: ${video["durationMinutes"]}'),
+                            Text('Data de lançamento: ${video["releaseDate"]}'),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              // Ação para fechar o diálogo
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                                'Fechar'), // Usei um texto em vez de um ícone para o botão de fechar
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  // child: Text('Deslogar'),
+                ),
+              );
+            },
           );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        // Adicionei um botão flutuante para adicionar um novo vídeo
-        child: Icon(Icons.add),
-        onPressed: () {
-          // Crie um novo objeto Video com os dados que você quiser
-          Video newVideo = Video(
-            id: 3,
-            name: 'Video 3',
-            description: 'Descrição do Video 3',
-            genre: 'Comedy',
-            type: 'Filme',
-            ageRestriction: '12 anos',
-            durationMinutes: 90,
-            image: 'assets/images/alvo.png',
-            releaseDate: '01/03/2020',
-          );
-          addVideo(newVideo); // Chamei o método de adicionar o vídeo
-        },
-      ),
+        }
+      },
+    ),
+
+
+
+
+
+
+    //   body: ListView.builder(
+    //     itemCount: videos.length,
+    //     itemBuilder: (context, index) {
+    //       final video = videos[index];
+    //       return Card(
+    //         child: ListTile(
+    //           // leading: Image.asset(video.image),
+    //           title: Text(video["name"]),
+    //           subtitle: Text('Gênero: ${video["genre"]} - Tipo: ${video["type"]}'),
+    //           trailing: PopupMenuButton<String>(
+    //             onSelected: (value) {
+    //               if (value == 'Editar') {
+    //                 // Ação para editar o vídeo
+    //                 showEditDialog(context, index, video); // Chamei o método de exibir o diálogo de edição de vídeo
+    //               } else if (value == 'Excluir') {
+    //                 // Ação para excluir o vídeo
+    //                 deleteVideo(index); // Chamei o método de excluir o vídeo
+    //               }
+    //             },
+    //             itemBuilder: (context) => [
+    //               const PopupMenuItem<String>(
+    //                 value: 'Editar',
+    //                 child: Text('Editar'),
+    //               ),
+    //               const PopupMenuItem<String>(
+    //                 value: 'Excluir',
+    //                 child: Text('Excluir'),
+    //               ),
+    //             ],
+    //           ),
+    //           onTap: () {
+    //             // Ação ao clicar no título do vídeo (exibir detalhes, etc.)
+    //             // Usei um widget AlertDialog para exibir as informações do vídeo
+    //             showDialog(
+    //               context: context,
+    //               builder: (context) => AlertDialog(
+    //                 title: Text(video.name),
+    //                 content: Column(
+    //                   mainAxisSize: MainAxisSize
+    //                       .min, // Usei essa propriedade para ajustar o tamanho da coluna ao conteúdo
+    //                   crossAxisAlignment: CrossAxisAlignment
+    //                       .start, // Usei essa propriedade para alinhar o conteúdo à esquerda
+    //                   children: [
+    //                     Text('Descrição: ${video.description}'),
+    //                     Text('Tipo: ${video.type}'),
+    //                     Text(
+    //                         'Classificação indicativa:${video.ageRestriction}'),
+    //                     Text('Duração em minutos: ${video.durationMinutes}'),
+    //                     Text('Data de lançamento: ${video.releaseDate}'),
+    //                   ],
+    //                 ),
+    //                 actions: [
+    //                   TextButton(
+    //                     onPressed: () {
+    //                       // Ação para fechar o diálogo
+    //                       Navigator.pop(context);
+    //                     },
+    //                     child: const Text(
+    //                         'Fechar'), // Usei um texto em vez de um ícone para o botão de fechar
+    //                   ),
+    //                 ],
+    //               ),
+    //             );
+    //           },
+    //           // child: Text('Deslogar'),
+    //         ),
+    //       );
+    //     },
+    //   ),
+    // );
+
+
+
+
+
+
+
+
+
+
+
+
+
     );
   }
 }
