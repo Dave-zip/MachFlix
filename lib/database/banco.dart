@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -24,14 +26,21 @@ class DatabaseHelper {
   }
 
   Future<void> _createDatabase(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE user(
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name VARCHAR NOT NULL,
-      email VARCHAR NOT NULL,
-      password VARCHAR NOT NULL
-)
-    ''');
+//     await db.execute('''
+//       CREATE TABLE user(
+//       id INTEGER PRIMARY KEY AUTOINCREMENT,
+//       name VARCHAR NOT NULL,
+//       email VARCHAR NOT NULL,
+//       password VARCHAR NOT NULL
+// )
+//     ''');
+    String path = 'lib/database/script.txt';
+    List<String> queries = File(path).readAsLinesSync();
+
+    for (String query in queries) {
+      print(query);
+      await db.execute(query);
+    }
   }
 
   Future<int> insertData(Map<String, dynamic> row) async {

@@ -73,7 +73,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                       Text(
                           'Duração (minutos): ${videoData['durationMinutes']}'),
                       Text(
-                          'Imagem da Thumbnail: ${videoData['thumbnailImageId']}'),
+                          'Imagem da Thumbnail: ${videoData['thumbnailImageUrl']}'),
                       Text('Data de Lançamento: ${videoData['releaseDate']}'),
                     ],
                   ),
@@ -133,9 +133,9 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
         String name = '';
         String description = '';
         int type = 0; // Default to 0
-        String ageRestriction = '';
+        String ageRestriction = 'N';
         int durationMinutes = 0;
-        String thumbnailImageId = '';
+        String thumbnailImageUrl = '';
         String releaseDate = '';
 
         // Obter a data de hoje
@@ -160,7 +160,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                 decoration: InputDecoration(labelText: 'Descrição'),
               ),
               TextFormField(
-                onChanged: (value) => ageRestriction = value,
+                onChanged: (value) => ageRestriction = value.toUpperCase(),
                 decoration: InputDecoration(labelText: 'Restrição de Idade'),
               ),
               TextFormField(
@@ -170,7 +170,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                 keyboardType: TextInputType.number,
               ),
               TextFormField(
-                onChanged: (value) => thumbnailImageId = value,
+                onChanged: (value) => thumbnailImageUrl = value,
                 decoration: InputDecoration(labelText: 'Imagem da Thumbnail'),
               ),
               TextFormField(
@@ -207,7 +207,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                   'type': type,
                   'ageRestriction': ageRestriction,
                   'durationMinutes': durationMinutes,
-                  'thumbnailImageId': thumbnailImageId,
+                  'thumbnailImageUrl': thumbnailImageUrl,
                   'releaseDate': releaseDate,
                 };
 
@@ -254,7 +254,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
         (video['ageRestriction'] != 'S' &&
             video['ageRestriction'] != 'N') || // Nova validação
         video['durationMinutes'] <= 0 ||
-        video['thumbnailImageId'].isEmpty ||
+        video['thumbnailImageUrl'].isEmpty ||
         video['releaseDate'].isEmpty) {
       return false;
     }
@@ -297,7 +297,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
         int type = video['type'];
         String ageRestriction = video['ageRestriction'];
         int durationMinutes = video['durationMinutes'];
-        String thumbnailImageId = video['thumbnailImageId'];
+        String thumbnailImageUrl = video['thumbnailImageUrl'];
         String releaseDate = video['releaseDate'];
 
         return AlertDialog(
@@ -328,8 +328,8 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                 keyboardType: TextInputType.number,
               ),
               TextFormField(
-                initialValue: thumbnailImageId,
-                onChanged: (value) => thumbnailImageId = value,
+                initialValue: thumbnailImageUrl,
+                onChanged: (value) => thumbnailImageUrl = value,
                 decoration: InputDecoration(labelText: 'Imagem da Thumbnail'),
               ),
               TextFormField(
@@ -366,7 +366,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                   'type': type,
                   'ageRestriction': ageRestriction,
                   'durationMinutes': durationMinutes,
-                  'thumbnailImageId': thumbnailImageId,
+                  'thumbnailImageUrl': thumbnailImageUrl,
                   'releaseDate': releaseDate,
                 };
 

@@ -246,6 +246,7 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
+            heroTag: "btn1",
             onPressed: () {
               Navigator.push(
                 context,
@@ -256,6 +257,7 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
           ),
           SizedBox(height: 16),
           FloatingActionButton(
+            heroTag: "btn2",
             onPressed: () {
               Navigator.pushReplacement(
                 context,

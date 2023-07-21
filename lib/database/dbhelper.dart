@@ -15,7 +15,7 @@ const columnVideoDescription = 'description';
 const columnVideoType = 'type';
 const columnVideoAgeRestriction = 'age_restriction';
 const columnVideoDurationMinutes = 'duration_minutes';
-const columnVideoThumbnailImageId = 'thumbnail_image_id';
+const columnVideothumbnailImageUrl = 'thumbnail_image_id';
 const columnVideoReleaseDate = 'release_date';
 
 const tableUserVideo = 'user_video';
@@ -77,7 +77,7 @@ class DatabaseHelper {
             $columnVideoType TEXT NOT NULL,
             $columnVideoAgeRestriction TEXT NOT NULL,
             $columnVideoDurationMinutes INTEGER NOT NULL,
-            $columnVideoThumbnailImageId TEXT NOT NULL,
+            $columnVideothumbnailImageUrl TEXT NOT NULL,
             $columnVideoReleaseDate TEXT NOT NULL
           )
           ''');

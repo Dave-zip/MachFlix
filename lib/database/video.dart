@@ -37,7 +37,7 @@ class Video {
 //   final int type;
 //   final String ageRestriction;
 //   final int durationMinutes;
-//   final String thumbnailImageId;
+//   final String thumbnailImageUrl;
 //   final String releaseDate;
 
 //   Video({
@@ -47,7 +47,7 @@ class Video {
 //     required this.type,
 //     required this.ageRestriction,
 //     required this.durationMinutes,
-//     required this.thumbnailImageId,
+//     required this.thumbnailImageUrl,
 //     required this.releaseDate,
 //   });
 
@@ -59,7 +59,7 @@ class Video {
 //         type = map[DatabaseHelper.columnVideoType],
 //         ageRestriction = map[DatabaseHelper.columnVideoAgeRestriction],
 //         durationMinutes = map[DatabaseHelper.columnVideoDurationMinutes],
-//         thumbnailImageId = map[DatabaseHelper.columnVideoThumbnailImageId],
+//         thumbnailImageUrl = map[DatabaseHelper.columnVideothumbnailImageUrl],
 //         releaseDate = map[DatabaseHelper.columnVideoReleaseDate];
 
 //   Null get image => null;
@@ -75,7 +75,7 @@ class Video {
 //       DatabaseHelper.columnVideoType: type,
 //       DatabaseHelper.columnVideoAgeRestriction: ageRestriction,
 //       DatabaseHelper.columnVideoDurationMinutes: durationMinutes,
-//       DatabaseHelper.columnVideoThumbnailImageId: thumbnailImageId,
+//       DatabaseHelper.columnVideothumbnailImageUrl: thumbnailImageUrl,
 //       DatabaseHelper.columnVideoReleaseDate: releaseDate,
 //     };
 //   }
