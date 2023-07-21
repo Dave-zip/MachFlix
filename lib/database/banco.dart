@@ -66,6 +66,16 @@ class DatabaseHelper {
     return await db.query('video');
   }
 
+  Future<List<Map<String, dynamic>>> getAllGenre() async {
+    Database db = await instance.database;
+    return await db.query('genre');
+  }
+
+  Future<int> insertVideoGenre(Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    return await db.insert('video_genre', row);
+  }
+
   Future<List<Map<String, dynamic>>> getMyVideos(int userId) async {
     Database db = await instance.database;
     return await db.query('video', where: 'user_id = ?', whereArgs: [userId]);

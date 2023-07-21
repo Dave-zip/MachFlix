@@ -12,10 +12,25 @@ class MeusVideosScreen extends StatefulWidget {
 class _MeusVideosScreenState extends State<MeusVideosScreen> {
   late Future<List<Map<String, dynamic>>> _videosFuture;
 
+  get genreList => DatabaseHelper.instance.getAllGenre();
+
   @override
   void initState() {
     super.initState();
     _videosFuture = _fetchVideos();
+  }
+
+  void addVideo(Map<String, dynamic> video, String genre) {
+    setState(() {
+      DatabaseHelper.instance.insertVideoGenre({'videoid': video['id'], 'genreid': genre as int});
+      DatabaseHelper.instance.insertVideo(video);
+    });
+  }
+
+  void editVideo(Map<String, dynamic> video) {
+    setState(() {
+      DatabaseHelper.instance.updateVideo(video);
+    });
   }
 
   Future<List<Map<String, dynamic>>> _fetchVideos() async {
@@ -75,6 +90,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                       Text(
                           'Imagem da Thumbnail: ${videoData['thumbnailImageUrl']}'),
                       Text('Data de Lançamento: ${videoData['releaseDate']}'),
+                      Text('Gênero: ${index}'),
                     ],
                   ),
                   trailing: Row(
@@ -146,6 +162,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
         // Definir a data de hoje como a data de lançamento padrão
         releaseDate = formattedDate;
 
+        String genre = '';
         return AlertDialog(
           title: Text('Novo Vídeo'),
           content: Column(
@@ -188,6 +205,18 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                 },
                 decoration: InputDecoration(labelText: 'Tipo (0 ou 1)'),
               ),
+                            DropdownButtonFormField<String>(
+                value: genreList,
+                onChanged: (value) => genre = value!,
+                items: genreList
+                    .map((genre) => DropdownMenuItem<String>(
+                          value: genre['id'],
+                          child: Text(genre),
+                        ))
+                    .toList(),
+                hint: Text('Selecione o gênero'),
+                decoration: InputDecoration(labelText: 'Gênero'),
+              ),
             ],
           ),
           actions: [
@@ -213,7 +242,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
 
                 // Validar os dados do vídeo antes de inserir no banco de dados
                 if (_validateVideoData(video)) {
-                  DatabaseHelper.instance.insertVideo(video);
+                  addVideo(video, genre);
                   // Fechar o diálogo
                   Navigator.of(context).pop();
                   // Atualizar a lista de vídeos
@@ -372,7 +401,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
 
                 // Validate updated video data before updating the database
                 if (_validateVideoData(updatedVideo)) {
-                  DatabaseHelper.instance.updateVideo(updatedVideo);
+                  editVideo(updatedVideo);
                   // Close the dialog
                   Navigator.of(context).pop();
                   // Refresh the videos list
