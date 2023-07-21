@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../database/bancovideos.dart';
+import '../database/banco.dart';
 import '../home/login_screen.dart';
 import './my_videos.dart'; // Importe a tela MyVideosScreen.dart
 import 'package:intl/intl.dart';
@@ -20,7 +20,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
 
   Future<List<Map<String, dynamic>>> _fetchVideos() async {
     List<Map<String, dynamic>> videos =
-        await DatabaseHelperV.instance.getMyVideos(userId);
+        await DatabaseHelper.instance.getMyVideos(userId);
 
     return videos;
   }
@@ -213,7 +213,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
 
                 // Validar os dados do vídeo antes de inserir no banco de dados
                 if (_validateVideoData(video)) {
-                  DatabaseHelperV.instance.insertVideo(video);
+                  DatabaseHelper.instance.insertVideo(video);
                   // Fechar o diálogo
                   Navigator.of(context).pop();
                   // Atualizar a lista de vídeos
@@ -372,7 +372,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
 
                 // Validate updated video data before updating the database
                 if (_validateVideoData(updatedVideo)) {
-                  DatabaseHelperV.instance.updateVideo(updatedVideo);
+                  DatabaseHelper.instance.updateVideo(updatedVideo);
                   // Close the dialog
                   Navigator.of(context).pop();
                   // Refresh the videos list
@@ -424,7 +424,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
             ElevatedButton(
               onPressed: () async {
                 // Remove the video from the database
-                await DatabaseHelperV.instance.deleteVideo(videoId);
+                await DatabaseHelper.instance.deleteVideo(videoId);
                 // Close the dialog
                 Navigator.of(context).pop();
                 // Refresh the videos list

@@ -26,14 +26,6 @@ class DatabaseHelper {
   }
 
   Future<void> _createDatabase(Database db, int version) async {
-//     await db.execute('''
-//       CREATE TABLE user(
-//       id INTEGER PRIMARY KEY AUTOINCREMENT,
-//       name VARCHAR NOT NULL,
-//       email VARCHAR NOT NULL,
-//       password VARCHAR NOT NULL
-// )
-//     ''');
     String path = 'lib/database/script.txt';
     List<String> queries = File(path).readAsLinesSync();
 
@@ -72,6 +64,11 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getAllVideo() async {
     Database db = await instance.database;
     return await db.query('video');
+  }
+
+  Future<List<Map<String, dynamic>>> getMyVideos(int userId) async {
+    Database db = await instance.database;
+    return await db.query('video', where: 'user_id = ?', whereArgs: [userId]);
   }
 
   Future<int> updateVideo(Map<String, dynamic> row) async {

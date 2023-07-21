@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final/database/video.dart';
-
-import '../database/bancovideos.dart';
+import '../database/banco.dart';
 
 class VideosScreen extends StatefulWidget {
   @override
@@ -20,7 +19,7 @@ class _VideosScreenState extends State<VideosScreen> {
 
   Future<List<Map<String, dynamic>>> _fetchVideos() async {
     List<Map<String, dynamic>> videos =
-        (await DatabaseHelperV.instance.getAllVideo());
+        (await DatabaseHelper.instance.getAllVideo());
 
     return videos;
   }
@@ -28,21 +27,21 @@ class _VideosScreenState extends State<VideosScreen> {
   // Criei um método para adicionar um novo vídeo à lista
   void addVideo(Map<String, dynamic> video) {
     setState(() {
-      DatabaseHelperV.instance.insertVideo(video);
+      DatabaseHelper.instance.insertVideo(video);
     });
   }
 
   // Criei um método para editar um vídeo na lista
   void editVideo(int index, Map<String, dynamic> video) {
     setState(() {
-      DatabaseHelperV.instance.updateVideo(video);
+      DatabaseHelper.instance.updateVideo(video);
     });
   }
 
   // Criei um método para excluir um vídeo da lista
   void deleteVideo(int index) {
     setState(() {
-      DatabaseHelperV.instance.deleteVideo(index);
+      DatabaseHelper.instance.deleteVideo(index);
     });
   }
 

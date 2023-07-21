@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../database/bancovideos.dart';
+import '../database/banco.dart';
 import '../home/home_screen.dart';
 import '../home/login_screen.dart';
 import './meusvideos.dart'; // Importe a tela MeusVideos.dart
@@ -21,26 +21,26 @@ class _MyVideosScreenState extends State<MyVideosScreen> {
 
   Future<List<Map<String, dynamic>>> _fetchVideos() async {
     List<Map<String, dynamic>> videos =
-        (await DatabaseHelperV.instance.getAllVideo());
+        (await DatabaseHelper.instance.getAllVideo());
 
     return videos;
   }
 
   void addVideo(Map<String, dynamic> video) {
     setState(() {
-      DatabaseHelperV.instance.insertVideo(video);
+      DatabaseHelper.instance.insertVideo(video);
     });
   }
 
   void editVideo(int index, Map<String, dynamic> video) {
     setState(() {
-      DatabaseHelperV.instance.updateVideo(video);
+      DatabaseHelper.instance.updateVideo(video);
     });
   }
 
   void deleteVideo(int index) {
     setState(() {
-      DatabaseHelperV.instance.deleteVideo(index);
+      DatabaseHelper.instance.deleteVideo(index);
     });
   }
 
