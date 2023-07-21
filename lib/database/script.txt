@@ -14,13 +14,13 @@ INSERT INTO genre(name) VALUES('Aventura');
 INSERT INTO genre(name) VALUES('Suspense');
 INSERT INTO genre(name) VALUES('Ação');
 
-CREATE TABLE video(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, name VARCHAR(2) NOT NULL, description TEXT NOT NULL, type INTEGER NOT NULL, ageRestriction VARCHAR NOT NULL, durationMinutes INTEGER NOT NULL, thumbnailImageId VARCHAR NOT NULL, releaseDate TEXT NOT NULL);
+CREATE TABLE video(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, name VARCHAR(2) NOT NULL, description TEXT NOT NULL, type INTEGER NOT NULL, ageRestriction VARCHAR NOT NULL, durationMinutes INTEGER NOT NULL, thumbnailImageUrl VARCHAR NOT NULL, releaseDate TEXT NOT NULL);
 
-INSERT INTO video(user_id, name, description, type, ageRestriction, durationMinutes, thumbnailImageId, releaseDate) VALUES(1, 'Filme 1', 'Descrição 1', 0, '18 anos', 120, 'url imagem', '01/01/2020');
-INSERT INTO video(user_id, name, description, type, ageRestriction, durationMinutes, thumbnailImageId, releaseDate) VALUES(1, 'Filme 2', 'Descrição 2', 0, '18 anos', 120, 'url imagem', '01/01/2020');
-INSERT INTO video(user_id, name, description, type, ageRestriction, durationMinutes, thumbnailImageId, releaseDate) VALUES(1, 'Filme 3', 'Descrição 3', 0, '18 anos', 120, 'url imagem', '01/01/2020');
-INSERT INTO video(user_id, name, description, type, ageRestriction, durationMinutes, thumbnailImageId, releaseDate) VALUES(2, 'Filme 4', 'Descrição 4', 0, '18 anos', 120, 'url imagem', '01/01/2020');
-INSERT INTO video(user_id, name, description, type, ageRestriction, durationMinutes, thumbnailImageId, releaseDate) VALUES(2, 'Filme 5', 'Descrição 5', 0, '18 anos', 120, 'url imagem', '01/01/2020');
+INSERT INTO video(user_id, name, description, type, ageRestriction, durationMinutes, thumbnailImageUrl, releaseDate) VALUES(1, 'Filme 1', 'Descrição 1', 0, '18 anos', 120, 'url imagem', '01/01/2020');
+INSERT INTO video(user_id, name, description, type, ageRestriction, durationMinutes, thumbnailImageUrl, releaseDate) VALUES(1, 'Filme 2', 'Descrição 2', 0, '18 anos', 120, 'url imagem', '01/01/2020');
+INSERT INTO video(user_id, name, description, type, ageRestriction, durationMinutes, thumbnailImageUrl, releaseDate) VALUES(1, 'Filme 3', 'Descrição 3', 0, '18 anos', 120, 'url imagem', '01/01/2020');
+INSERT INTO video(user_id, name, description, type, ageRestriction, durationMinutes, thumbnailImageUrl, releaseDate) VALUES(2, 'Filme 4', 'Descrição 4', 0, '18 anos', 120, 'url imagem', '01/01/2020');
+INSERT INTO video(user_id, name, description, type, ageRestriction, durationMinutes, thumbnailImageUrl, releaseDate) VALUES(2, 'Filme 5', 'Descrição 5', 0, '18 anos', 120, 'url imagem', '01/01/2020');
 
 
 CREATE TABLE video_genre(id INTEGER PRIMARY KEY AUTOINCREMENT, videoid INTEGER NOT NULL, genreid INTEGER NOT NULL, FOREIGN KEY(videoid) REFERENCES video(id), FOREIGN KEY(genreid) REFERENCES genre(id));
