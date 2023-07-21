@@ -22,7 +22,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
 
   void addVideo(Map<String, dynamic> video, String genre) {
     setState(() {
-      DatabaseHelper.instance.insertVideoGenre({'videoid': video['id'], 'genreid': genre as int});
+      DatabaseHelper.instance.insertVideoGenre({'videoid': video['id'], 'genreid': int.parse(genre)});
       DatabaseHelper.instance.insertVideo(video);
     });
   }
@@ -31,6 +31,10 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
     setState(() {
       DatabaseHelper.instance.updateVideo(video);
     });
+  }
+
+  Future<String> getVideoGenre(Map<String, dynamic> video) {
+    return DatabaseHelper.instance.getVideoGenre(video['id']);
   }
 
   Future<List<Map<String, dynamic>>> _fetchVideos() async {
@@ -90,7 +94,7 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                       Text(
                           'Imagem da Thumbnail: ${videoData['thumbnailImageUrl']}'),
                       Text('Data de Lançamento: ${videoData['releaseDate']}'),
-                      Text('Gênero: ${index}'),
+                      Text('Gênero: ${getVideoGenre(videoData)}'),
                     ],
                   ),
                   trailing: Row(
@@ -205,18 +209,18 @@ class _MeusVideosScreenState extends State<MeusVideosScreen> {
                 },
                 decoration: InputDecoration(labelText: 'Tipo (0 ou 1)'),
               ),
-                            DropdownButtonFormField<String>(
-                value: genreList,
-                onChanged: (value) => genre = value!,
-                items: genreList
-                    .map((genre) => DropdownMenuItem<String>(
-                          value: genre['id'],
-                          child: Text(genre),
-                        ))
-                    .toList(),
-                hint: Text('Selecione o gênero'),
-                decoration: InputDecoration(labelText: 'Gênero'),
-              ),
+              // DropdownButtonFormField<String>(
+              //   value: genreList,
+              //   onChanged: (value) => genre = value!,
+              //   items: genreList
+              //       .map((genre) => DropdownMenuItem<String>(
+              //             value: genre['id'],
+              //             child: Text(genre),
+              //           ))
+              //       .toList(),
+              //   hint: Text('Selecione o gênero'),
+              //   decoration: InputDecoration(labelText: 'Gênero'),
+              // ),
             ],
           ),
           actions: [
